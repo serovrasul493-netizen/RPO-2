@@ -1,31 +1,59 @@
-#pragma once
+#ifndef STACK_H
+#define STACK_H
 
 #include <iostream>
 
-struct element
-{
-	int value;
-	element* next = nullptr; // указатель на следующий элемент
+template <typename T>
+class Stack {
+private:
+    // РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ СЌР»РµРјРµРЅС‚Р° СЃС‚РµРєР° (СѓР·Р»Р°)
+    struct Node {
+        T data;         // Р”Р°РЅРЅС‹Рµ С‚РёРїР° T
+        Node* next;     // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РµРґСѓСЋС‰РёР№ СѓР·РµР»
+
+        // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ СѓРґРѕР±РЅРѕРіРѕ СЃРѕР·РґР°РЅРёСЏ СѓР·Р»Р°
+        Node(const T& value, Node* nextNode = nullptr) : data(value), next(nextNode) {}
+    };
+
+    Node* head;  // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° РІРµСЂС€РёРЅСѓ СЃС‚РµРєР°
+
+public:
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+    Stack() : head(nullptr) {}
+
+    // Р”РµСЃС‚СЂСѓРєС‚РѕСЂ (РІР°Р¶РЅРѕ РґР»СЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ РїР°РјСЏС‚Рё!)
+    ~Stack() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+
+    // Р”РѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РЅР° РІРµСЂС€РёРЅСѓ
+    void push(const T& value) {
+        head = new Node(value, head);
+    }
+
+    // РЈРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° СЃ РІРµСЂС€РёРЅС‹
+    void pop() {
+        if (!isEmpty()) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+    // РџРѕР»СѓС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РЅР° РІРµСЂС€РёРЅРµ (Р±РµР· СѓРґР°Р»РµРЅРёСЏ)
+    T top() const {
+        if (!isEmpty()) {
+            return head->data;
+        }
+        throw std::runtime_error("Stack is empty!");
+    }
+
+    // РџСЂРѕРІРµСЂРєР°, РїСѓСЃС‚ Р»Рё СЃС‚РµРє
+    bool isEmpty() const {
+        return head == nullptr;
+    }
 };
 
-// Добавление элемента в стек
-// Вершина стека изменяется после добавления элемента. Это значит, что параметр stack должен передаваться по ссылке!
-void push(element*& stack, int value);
-
-// Удаление элемента из стека с возвращением хранимого значения
-bool pop(element*& stack, int& value);
-
-// Получение значения самого верхнего элемента в стеке
-// Возвращается константный указатль на поле верхнего элемента в стеке
-const int* peek(const element* stack);
-
-// Получение следующего элемента стека
-// Указатель на элемент стека может быть nullptr, если в списке больше нет элементов
-element* NextElement(const element* element);
-
-// Получение последнего элемента стека
-element* LastElement(const element* element);
-
-// Удаление всего стека
-// Указатель на стек изменяется, поэтому параметр передается по ссылке
-void ClearStack(element*& stack);
+#endif // STACK_H
