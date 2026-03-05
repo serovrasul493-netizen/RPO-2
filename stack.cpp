@@ -1,88 +1,76 @@
 #include "stack.h"
+#include <iostream>
+#include <string>
 
-void push(element*& stack, int value)
-{
-	element* newElement = new element;
-	newElement->value = value;
+int main() {
+    setlocale(LC_ALL, "Russian");
 
-	// Если стек при добавлении пуст, задаем новый элемент, как первый
-	if (!stack) stack = newElement;
-	else
-	{
-		// Стек уже существует, новый элемент размещается на вершине
-		newElement->next = stack;
-		stack = newElement;
-	}
-}
+    // === РўРµСЃС‚ 1: РЎС‚РµРє РґР»СЏ С†РµР»С‹С… С‡РёСЃРµР» ===
+    std::cout << "=== РЎС‚РµРє РґР»СЏ int ===" << std::endl;
+    Stack<int> intStack;
 
-bool pop(element*& stack, int& value)
-{
-	// Извлечение элемента из стека, если он не пуст
-	if (!stack) return false;
-	// Необходимо сохранять ссылку на самый верхний элемент
-	element* ref = stack;
-	value = stack->value;
-	stack = stack->next; // смещение указателя на новую вершину
-	delete ref;
-	return true;
-}
+    // Р—Р°РїРѕР»РЅСЏРµРј СЃС‚РµРє С‡РёСЃР»Р°РјРё РѕС‚ 0 РґРѕ 20
+    for (int i = 0; i <= 20; i++) {
+        intStack.push(i);
+    }
 
-const int* peek(const element* stack)
-{
-	// Получение значения с вершины стека, если он не пуст
-	if (!stack) return nullptr;
-	return &stack->value;
-}
+    std::cout << "РЎРѕРґРµСЂР¶РёРјРѕРµ СЃС‚РµРєР° int (РІРµСЂС€РёРЅР° РїРµСЂРІР°СЏ):" << std::endl;
+    intStack.print();
 
-// Возвращение следующего элемента в стеке от передаваемого в параметр
-element* NextElement(const element* element)
-{
-	if (element) return element->next;
-	return nullptr;
-}
+    // РР·РІР»РµРєР°РµРј РЅРµСЃРєРѕР»СЊРєРѕ СЌР»РµРјРµРЅС‚РѕРІ
+    int value;
+    std::cout << "\nРР·РІР»РµРєР°РµРј 3 СЌР»РµРјРµРЅС‚Р°:" << std::endl;
+    for (int i = 0; i < 3; i++) {
+        if (intStack.pop(value)) {
+            std::cout << "РР·РІР»РµС‡РµРЅРѕ: " << value << std::endl;
+        }
+    }
 
-// Возвращение последнего элемента в стеке
-element* LastElement(const element* elem)
-{
-	// Перебор указателей на последующий элемент в стеке
-	if (elem) while (elem->next) elem = elem->next;
-	return (element*)elem;
-}
+    std::cout << "Р’РµСЂС€РёРЅР° РїРѕСЃР»Рµ РёР·РІР»РµС‡РµРЅРёСЏ: " << *intStack.peek() << std::endl;
 
-// Очистка памяти всех элементов стека посредством обращения к ним через указатель
-void ClearStack(element*& stack)
-{
-	while (stack)
-	{
-		element* toRemove = stack; // создание указателя на объект, который нужно очистить
-		stack = stack->next; // продвижение по следующему элементу в стеке
-	}
-	// 1 цикл: 
-	//			- создаем объект элемента в который записываем первый элемент стека
-	//			- в параметр записываем следующий элемент стека, как бы продвигая итерацию вперед
-}
+    // === РўРµСЃС‚ 2: РЎС‚РµРє РґР»СЏ С‡РёСЃРµР» СЃ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ ===
+    std::cout << "\n=== РЎС‚РµРє РґР»СЏ double ===" << std::endl;
+    Stack<double> doubleStack;
 
-void FillStack(element*& stack)
-{
-	for (int i = 0; i <= 20; i++)
-	{
-		push(stack, i);
-	}
-}
+    doubleStack.push(3.14);
+    doubleStack.push(2.718);
+    doubleStack.push(1.618);
 
-void PrintStack(const element* stack)
-{
-	// Ключевое слово авто настоятельно рекомендуется к использованию только в циклах и линейных списках! Компилятору гораздо удобнее самостоятельно определять тип данных, если он предсказуем, например в массивах или в линейных списках
-	auto currentElement = (element*)stack; //  Получение указателя на вершину стека
-	auto lastElement = LastElement(stack);
-	while (currentElement)
-	{
-		// Получение значения текущего элемента стека
-		auto value = peek(currentElement);
+    std::cout << "РЎРѕРґРµСЂР¶РёРјРѕРµ СЃС‚РµРєР° double:" << std::endl;
+    doubleStack.print();
 
-		std::cout << *value << std::endl;
+    // === РўРµСЃС‚ 3: РЎС‚РµРє РґР»СЏ СЃС‚СЂРѕРє ===
+    std::cout << "\n=== РЎС‚РµРє РґР»СЏ string ===" << std::endl;
+    Stack<std::string> stringStack;
 
-		// Выставление следующего элемента в стеке как текущего
-		currentElement = NextElement(currentElement);
-	}
+    stringStack.push("РџРµСЂРІС‹Р№");
+    stringStack.push("Р’С‚РѕСЂРѕР№");
+    stringStack.push("РўСЂРµС‚РёР№");
+
+    std::cout << "РЎРѕРґРµСЂР¶РёРјРѕРµ СЃС‚РµРєР° string:" << std::endl;
+    stringStack.print();
+
+    // РР·РІР»РµРєР°РµРј СЃС‚СЂРѕРєРё
+    std::string str;
+    while (stringStack.pop(str)) {
+        std::cout << "РР·РІР»РµС‡РµРЅРѕ РёР· string: " << str << std::endl;
+    }
+
+    // === РўРµСЃС‚ 4: РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ fill() РєР°Рє РІ РѕСЂРёРіРёРЅР°Р»Рµ ===
+    std::cout << "\n=== РўРµСЃС‚ РјРµС‚РѕРґР° fill() ===" << std::endl;
+    Stack<int> filledStack;
+    filledStack.fill(); // Р·Р°РїРѕР»РЅСЏРµС‚ 21 СЌР»РµРјРµРЅС‚РѕРј (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ)
+    std::cout << "РЎС‚РµРє РїРѕСЃР»Рµ fill() (РїРµСЂРІС‹Рµ 5 СЌР»РµРјРµРЅС‚РѕРІ):" << std::endl;
+
+    // РџРµС‡Р°С‚Р°РµРј С‚РѕР»СЊРєРѕ РїРµСЂРІС‹Рµ 5 РґР»СЏ РєСЂР°С‚РєРѕСЃС‚Рё
+    const int* valPtr;
+    for (int i = 0; i < 5; i++) {
+        valPtr = filledStack.peek();
+        if (valPtr) {
+            std::cout << *valPtr << std::endl;
+            filledStack.pop(value); // РґРІРёРіР°РµРјСЃСЏ РґР°Р»СЊС€Рµ
+        }
+    }
+
+    return 0;
 }
